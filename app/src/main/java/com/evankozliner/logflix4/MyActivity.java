@@ -23,6 +23,8 @@ public class MyActivity extends ListActivity {
         setContentView(R.layout.main_activity);
         if(isConnected()) {
             apiAdaptor = new ApiAdaptor();
+            connected = (TextView) findViewById(R.id.connectedTextView);
+            connected.setText("Connected :)");
         }
         else {
             connected = (TextView) findViewById(R.id.connectedTextView);
