@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.app.ListActivity;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -14,13 +15,19 @@ import java.util.List;
 
 public class MyActivity extends ListActivity {
     public BaseAdapter apiAdaptor;
+    TextView connected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-
-        apiAdaptor = new ApiAdaptor();
+        if(isConnected()) {
+            apiAdaptor = new ApiAdaptor();
+        }
+        else {
+            connected = (TextView) findViewById(R.id.connectedTextView);
+            connected.setText("Not connected ):");
+        }
     }
 
     /**
