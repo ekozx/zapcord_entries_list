@@ -1,6 +1,7 @@
 package com.evankozliner.logflix4;
 
 import android.app.Activity;
+import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -20,8 +21,8 @@ import java.util.List;
 public class MyActivity extends ListActivity {
     public BaseAdapter apiAdaptor;
     TextView connected;
-    JSONArray entries;
     public Button buttonConnect;
+    Context listActivityContext = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,15 +30,9 @@ public class MyActivity extends ListActivity {
         setContentView(R.layout.main_activity);
         if(isConnected()) {
             apiAdaptor = new ApiAdaptor();
-            connected = (TextView) findViewById(R.id.connectedTextView);
-            connected.setText("Connected :)");
 
             buttonConnect = (Button) findViewById(R.id.button_connect);
             buttonConnect.setOnClickListener(new connectListener());
-        }
-        else {
-            connected = (TextView) findViewById(R.id.connectedTextView);
-            connected.setText("Not connected ):");
         }
     }
 
@@ -49,16 +44,28 @@ public class MyActivity extends ListActivity {
     public boolean isConnected() {
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE); ;
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected())
+        if (networkInfo != null && networkInfo.isConnected()) {
+            connected = (TextView) findViewById(R.id.connectedTextView);
+            connected.setText("Connected :)");
+
             return true;
-        else
+        } else {
+            connected = (TextView) findViewById(R.id.connectedTextView);
+            connected.setText("Not connected ):");
+
             return false;
+        }
     }
 
+    /**
+     * Listener for clicking the connect button.
+     */
     private class connectListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            
+            if(isConnected()) {
+                new ApiHelpers().requestEntries(listActivityContext);
+            }
         }
     }
 }

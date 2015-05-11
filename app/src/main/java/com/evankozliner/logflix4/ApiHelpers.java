@@ -41,6 +41,7 @@ public class ApiHelpers {
     private class ApiListener implements Response.Listener<JSONArray> {
         @Override
         public void onResponse(JSONArray jsonArray) {
+            System.out.println(jsonArray);
             System.out.println("received response");
         }
     }
