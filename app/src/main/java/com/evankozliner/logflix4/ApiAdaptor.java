@@ -2,9 +2,12 @@ package com.evankozliner.logflix4;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
+
 import java.util.LinkedList;
 import com.android.volley.*;
 import com.android.volley.toolbox.JsonArrayRequest;
@@ -21,27 +24,67 @@ import java.util.List;
  * Created by maratkozliner on 5/10/15.
  */
 public class ApiAdaptor extends BaseAdapter {
+    public static JSONArray entries;
 
-    public ApiAdaptor() {
+    public ApiAdaptor(JSONArray jsonEntries) {
+        if(jsonEntries != null) {
+            System.out.println("Json entries");
+            this.entries = jsonEntries;
+        } else {
+            System.out.println("No Json entries");
+            this.entries = new JSONArray();
+        }
     }
 
     @Override
     public int getCount() {
-        return 0;
+        return this.entries.length();
     }
 
     @Override
     public Object getItem(int position) {
-        return null;
+        try {
+            return this.entries.get(position);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return getItem(position).hashCode();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        return null;
+//        entries = ApiHelpers.apiEntries;
+        ViewHolder holder;
+        View entryTemplate = convertView;
+
+        if(convertView == null) {
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+            entryTemplate = inflater.inflate(R.layout.entry_template, null, true);
+            holder = new ViewHolder();
+            holder.pictureUrl = (TextView) entryTemplate.findViewById(R.id.pictureUrl);
+            holder.title = (TextView) entryTemplate.findViewById(R.id.title);
+            //settag method is for to associate this data to android
+            entryTemplate.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+
+        try {
+            holder.pictureUrl.setText(entries.getJSONObject(position).getString("thumbnail_file_name"));
+            holder.title.setText(entries.getJSONObject(position).getString("title"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return entryTemplate;
+    }
+
+    static class ViewHolder {
+        public TextView pictureUrl;
+        public TextView title;
     }
 }

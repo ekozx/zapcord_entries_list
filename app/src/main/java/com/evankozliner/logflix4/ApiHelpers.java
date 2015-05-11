@@ -1,7 +1,6 @@
 package com.evankozliner.logflix4;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -16,6 +15,7 @@ import org.json.JSONArray;
  * Created by maratkozliner on 5/11/15.
  */
 public class ApiHelpers {
+    public static JSONArray apiEntries;
 
     public void requestEntries(Context c) {
         RequestQueue queue = Volley.newRequestQueue(c);
@@ -43,6 +43,7 @@ public class ApiHelpers {
         public void onResponse(JSONArray jsonArray) {
             System.out.println(jsonArray);
             System.out.println("received response");
+            apiEntries = jsonArray;
         }
     }
 }

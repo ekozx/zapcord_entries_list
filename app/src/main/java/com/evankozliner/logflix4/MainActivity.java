@@ -18,7 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public class MyActivity extends ListActivity {
+public class MainActivity extends ListActivity {
     public BaseAdapter apiAdaptor;
     TextView connected;
     public Button buttonConnect;
@@ -29,8 +29,6 @@ public class MyActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         if(isConnected()) {
-            apiAdaptor = new ApiAdaptor();
-
             buttonConnect = (Button) findViewById(R.id.button_connect);
             buttonConnect.setOnClickListener(new connectListener());
         }
@@ -65,6 +63,11 @@ public class MyActivity extends ListActivity {
         public void onClick(View v) {
             if(isConnected()) {
                 new ApiHelpers().requestEntries(listActivityContext);
+//                System.out.println("Api entries length");
+//                System.out.println(ApiHelpers.apiEntries.length());
+//
+                ApiAdaptor apiAdaptor = new ApiAdaptor(ApiHelpers.apiEntries);
+                setListAdapter(apiAdaptor);
             }
         }
     }
