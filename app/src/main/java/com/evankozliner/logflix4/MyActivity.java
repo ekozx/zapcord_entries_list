@@ -22,7 +22,7 @@ public class MyActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         if(isConnected()) {
-            apiAdaptor = new ApiAdaptor();
+            apiAdaptor = new ApiAdaptor(this);
             connected = (TextView) findViewById(R.id.connectedTextView);
             connected.setText("Connected :)");
         }
