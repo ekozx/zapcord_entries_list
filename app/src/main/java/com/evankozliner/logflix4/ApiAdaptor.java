@@ -22,34 +22,7 @@ import java.util.List;
  */
 public class ApiAdaptor extends BaseAdapter {
 
-    static List<String> thumbnailUriList = new LinkedList<String>();
-    static List<String> titleList = new LinkedList<String>();
-
-    public ApiAdaptor(Context c) {
-//        HttpAsyncTask async = new HttpAsyncTask();
-//        async.execute("www.zapcord.com/api/v1/entries.json");
-        System.out.println("Hi there");
-        requestEntries(c);
-    }
-
-    private void requestEntries(Context c) {
-        RequestQueue queue = Volley.newRequestQueue(c);
-
-        String url = "http://www.zapcord.com/api/v1/entries.json";
-        JsonArrayRequest jsObjRequest = new JsonArrayRequest
-        (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                System.out.println("received response");
-                System.out.println(response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        });
-        queue.add(jsObjRequest);
+    public ApiAdaptor() {
     }
 
     @Override

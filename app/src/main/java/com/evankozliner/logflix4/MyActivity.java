@@ -6,8 +6,12 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.app.ListActivity;
+import android.view.View;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
+
+import org.json.JSONArray;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -16,15 +20,20 @@ import java.util.List;
 public class MyActivity extends ListActivity {
     public BaseAdapter apiAdaptor;
     TextView connected;
+    JSONArray entries;
+    public Button buttonConnect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         if(isConnected()) {
-            apiAdaptor = new ApiAdaptor(this);
+            apiAdaptor = new ApiAdaptor();
             connected = (TextView) findViewById(R.id.connectedTextView);
             connected.setText("Connected :)");
+
+            buttonConnect = (Button) findViewById(R.id.button_connect);
+            buttonConnect.setOnClickListener(new connectListener());
         }
         else {
             connected = (TextView) findViewById(R.id.connectedTextView);
@@ -44,5 +53,12 @@ public class MyActivity extends ListActivity {
             return true;
         else
             return false;
+    }
+
+    private class connectListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            
+        }
     }
 }
