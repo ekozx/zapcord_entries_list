@@ -26,9 +26,8 @@ import java.util.List;
 
 
 public class MainActivity extends ListActivity {
-    public BaseAdapter apiAdaptor;
+    Button buttonConnect;
     TextView connected;
-    public Button buttonConnect;
     Context listActivityContext = this;
 
     @Override
@@ -69,32 +68,46 @@ public class MainActivity extends ListActivity {
         @Override
         public void onClick(View v) {
             if(isConnected()) {
-                RequestQueue queue = Volley.newRequestQueue(listActivityContext);
-
-                String url = "http://www.zapcord.com/api/v1/entries.json";
-                JsonArrayRequest jsObjRequest = new JsonArrayRequest(
-                        Request.Method.GET,
-                        url,
-                        null,
-                        new ApiListener(),
-                        new ApiErrListener()
-                );
-
-                queue.add(jsObjRequest);
+                addToRequestQueue();
             }
         }
     }
+
+    /**
+     * Does a GET request against the Zapcord API using the Google Volley library
+     * for entries.
+     */
+    private void addToRequestQueue() {
+        RequestQueue queue = Volley.newRequestQueue(listActivityContext);
+        String url = "http://www.zapcord.com/api/v1/entries.json";
+        JsonArrayRequest jsObjRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new ApiListener(),
+                new ApiErrListener()
+        );
+
+        queue.add(jsObjRequest);
+    }
+
+    /**
+     * Generic error listener for API requests.
+     */
     private class ApiErrListener implements  Response.ErrorListener {
         @Override
         public void onErrorResponse(VolleyError volleyError) {
             volleyError.printStackTrace();
         }
     }
+
+    /**
+     * Listens for a JSON response from the Zapcord API and populates a listview
+     * through the ListAdaptor, ApiAdaptor.
+     */
     private class ApiListener implements Response.Listener<JSONArray> {
         @Override
         public void onResponse(JSONArray jsonArray) {
-            System.out.println(jsonArray);
-            System.out.println("received response");
             ApiAdaptor apiAdaptor = new ApiAdaptor(jsonArray);
             setListAdapter(apiAdaptor);
         }
