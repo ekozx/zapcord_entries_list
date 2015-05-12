@@ -107,12 +107,14 @@ public class ApiAdaptor extends BaseAdapter {
 
         @Override
         protected Bitmap doInBackground(String... params) {
+            System.out.println("Fetching image...");
+            System.out.println(params[0]);
             return getImageBitMap(params[0]);
         }
 
         @Override
         protected void onPostExecute(Bitmap bm) {
-
+            holder.pictureUrl.setImageBitmap(bm);
         }
     }
 
@@ -133,6 +135,7 @@ public class ApiAdaptor extends BaseAdapter {
             InputStream input = connection.getInputStream();
             Bitmap myBitmap = BitmapFactory.decodeStream(input);
 
+            System.out.println("Returning the bitmap...");
             return myBitmap;
         }
         catch (IOException e) {
