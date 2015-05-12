@@ -12,6 +12,13 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+
 import org.json.JSONArray;
 
 import java.util.LinkedList;
@@ -62,13 +69,34 @@ public class MainActivity extends ListActivity {
         @Override
         public void onClick(View v) {
             if(isConnected()) {
-                new ApiHelpers().requestEntries(listActivityContext);
-//                System.out.println("Api entries length");
-//                System.out.println(ApiHelpers.apiEntries.length());
-//
-                ApiAdaptor apiAdaptor = new ApiAdaptor(ApiHelpers.apiEntries);
-                setListAdapter(apiAdaptor);
+                RequestQueue queue = Volley.newRequestQueue(listActivityContext);
+
+                String url = "http://www.zapcord.com/api/v1/entries.json";
+                JsonArrayRequest jsObjRequest = new JsonArrayRequest(
+                        Request.Method.GET,
+                        url,
+                        null,
+                        new ApiListener(),
+                        new ApiErrListener()
+                );
+
+                queue.add(jsObjRequest);
             }
+        }
+    }
+    private class ApiErrListener implements  Response.ErrorListener {
+        @Override
+        public void onErrorResponse(VolleyError volleyError) {
+            volleyError.printStackTrace();
+        }
+    }
+    private class ApiListener implements Response.Listener<JSONArray> {
+        @Override
+        public void onResponse(JSONArray jsonArray) {
+            System.out.println(jsonArray);
+            System.out.println("received response");
+            ApiAdaptor apiAdaptor = new ApiAdaptor(jsonArray);
+            setListAdapter(apiAdaptor);
         }
     }
 }
